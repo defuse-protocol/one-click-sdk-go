@@ -41,3 +41,4 @@ git push origin main
 git push origin "v$VERSION_NUMBER"
 
 echo "SDK regeneration and publishing completed successfully!"
+
