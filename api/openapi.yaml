@@ -9,6 +9,10 @@ servers:
 paths:
   /v0/tokens:
     get:
+      description: |-
+        Retrieves a list of tokens currently supported by the 1Click API for asset swaps.
+
+        Each token entry includes its blockchain, contract address (if available), price in USD, and other metadata such as symbol and decimals.
       operationId: getTokens
       parameters: []
       responses:
@@ -20,11 +24,19 @@ paths:
                   $ref: '#/components/schemas/TokenResponse'
                 type: array
           description: ""
-      summary: Returns tokens that can be swapped
+      summary: Get supported tokens
       tags:
       - OneClick
   /v0/quote:
     post:
+      description: |-
+        Generates a swap quote based on input parameters such as the assets, amount, slippage tolerance, and recipient/refund information.
+
+        Returns pricing details, estimated time, and a unique **deposit address** to which tokens must be transferred to initiate the swap.
+
+        You can set the `dry` parameter to `true` to simulate the quote request **without generating a deposit address** or initiating the swap process. This is useful for previewing swap parameters or validating input data without committing to an actual swap.
+
+        This endpoint is the first required step in the swap process.
       operationId: getQuote
       parameters: []
       requestBody:
@@ -46,11 +58,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
           description: Bad Request - Invalid input data
-      summary: Returns the best quote with deposit address
+        "401":
+          description: Unauthorized - JWT token is invalid
+      security:
+      - JWT-auth: []
+      summary: Request a swap quote
       tags:
       - OneClick
   /v0/status:
     get:
+      description: |-
+        Retrieves the current status of a swap using the unique deposit address from the quote.
+
+        The response includes the state of the swap (e.g., pending, processing, success, refunded) and any associated swap and transaction details.
       operationId: getExecutionStatus
       parameters:
       - explode: true
@@ -67,17 +87,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetExecutionStatusResponse'
           description: ""
+        "401":
+          description: Unauthorized - JWT token is invalid
         "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
           description: Deposit address not found
-      summary: Returns execution status for a given deposit address
+      security:
+      - JWT-auth: []
+      summary: Check swap execution status
       tags:
       - OneClick
   /v0/deposit/submit:
     post:
+      description: |-
+        Optionally notifies the 1Click service that a deposit has been sent to the specified address, using the blockchain transaction hash.
+
+        This step can speed up swap processing by allowing the system to preemptively verify the deposit.
       operationId: submitDepositTx
       parameters: []
       requestBody:
@@ -99,7 +127,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
           description: Bad Request - Invalid input data
-      summary: Submit a deposit transaction
+        "401":
+          description: Unauthorized - JWT token is invalid
+      security:
+      - JWT-auth: []
+      summary: Submit deposit transaction hash
       tags:
       - OneClick
 components:
@@ -139,6 +171,7 @@ components:
           - bera
           - bsc
           - pol
+          - tron
           example: near
           type: string
         symbol:
@@ -166,11 +199,34 @@ components:
       - priceUpdatedAt
       - symbol
       type: object
+    AppFee:
+      example:
+        fee: 100
+        recipient: recipient.near
+      properties:
+        recipient:
+          description: Intents Account ID where this fee will be transferred to
+          example: recipient.near
+          type: string
+        fee:
+          description: "Fee for this recipient as part of amountIn in basis points\
+            \ (1/100th of a percent), e.g. 100 for 1% fee"
+          example: 100
+          type: number
+      required:
+      - fee
+      - recipient
+      type: object
     QuoteRequest:
       example:
         quoteWaitingTimeMs: 3000
         amount: "1000"
         swapType: EXACT_INPUT
+        appFees:
+        - fee: 100
+          recipient: recipient.near
+        - fee: 100
+          recipient: recipient.near
         dry: true
         destinationAsset: nep141:sol-5ce3bf3a31af18be40ba30f721101b4341690186.omft.near
         refundType: ORIGIN_CHAIN
@@ -184,17 +240,20 @@ components:
         originAsset: nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near
       properties:
         dry:
-          description: "\n  Flag indicating whether this is a dry run request.\n\n\
-            \  If **true**, the response will **NOT** contain the following fields:\n\
-            \  \n   **depositAddress**\n      \n   **timeWhenInactive**\n      \n\
-            \   **timeEstimate**\n      \n   **deadline**\n  "
+          description: |-
+            Flag indicating whether this is a dry run request.
+            If `true`, the response will **NOT** contain the following fields:
+            - `depositAddress`
+            - `timeWhenInactive`
+            - `timeEstimate`
+            - `deadline`
           example: true
           type: boolean
         swapType:
-          description: "Whether to use the amount as the output or the input for the\
-            \ basis of the swap.\n\n   EXACT_OUTPUT: the **refundTo** address will\
-            \ always receive excess tokens back even after the swap is complete.\n\
-            \  "
+          description: |-
+            Whether to use the amount as the output or the input for the basis of the swap:
+            - `EXACT_INPUT` - request output amount for exact input.
+            - `EXACT_OUTPUT` - request output amount for exact output. The `refundTo` address will always receive excess tokens back even after the swap is complete.
           enum:
           - EXACT_INPUT
           - EXACT_OUTPUT
@@ -205,67 +264,75 @@ components:
           example: 100
           type: number
         originAsset:
-          description: ID of origin asset
+          description: ID of the origin asset.
           example: nep141:arb-0xaf88d065e77c8cc2239327c5edb3a432268e5831.omft.near
           type: string
         depositType:
-          description: "Type of deposit address\n  \n  ORIGIN_CHAIN - deposit address\
-            \ on origin chain\n  \n  INTENTS - **accountId** inside near intents to\
-            \ which you should transfer assets inside intents."
+          description: |-
+            Type of the deposit address:
+            - `ORIGIN_CHAIN` - deposit address on the origin chain
+            - `INTENTS` - **account ID** inside near intents to which you should transfer assets inside intents.
           enum:
           - ORIGIN_CHAIN
           - INTENTS
           type: string
         destinationAsset:
-          description: ID of destination asset
+          description: ID of the destination asset.
           example: nep141:sol-5ce3bf3a31af18be40ba30f721101b4341690186.omft.near
           type: string
         amount:
           description: "Amount to swap as the base amount (can be switched to exact\
             \ input/output using the dedicated flag), denoted in the smallest unit\
-            \ of the specified currency (e.g., wei for ETH)"
+            \ of the specified currency (e.g., wei for ETH)."
           example: "1000"
           type: string
         refundTo:
-          description: Address for user refund
+          description: Address for user refund.
           example: 0x2527D02599Ba641c19FEa793cD0F167589a0f10D
           type: string
         refundType:
-          description: "Type of refund address\n  \n   ORIGIN_CHAIN - assets will\
-            \ be refunded to **refundTo** address on origin chain\n   \n   INTENTS\
-            \ - assets will be refunded to **refundTo** intents account"
+          description: |-
+            Type of refund address:
+            - `ORIGIN_CHAIN` - assets will be refunded to `refundTo` address on the origin chain
+            - `INTENTS` - assets will be refunded to `refundTo` intents account
           enum:
           - ORIGIN_CHAIN
           - INTENTS
           type: string
         recipient:
-          description: "Recipient address, format should match **recipientType**"
+          description: Recipient address. The format should match `recipientType`.
           example: 13QkxhNMrTPxoCkRdYdJ65tFuwXPhL5gLS2Z5Nr6gjRK
           type: string
         recipientType:
-          description: "Type of recipient address\n  \n   DESTINATION_CHAIN - assets\
-            \ will be transferred to chain of **destinationAsset**\n   \n   INTENTS\
-            \ - assets will be transferred to account inside intents"
+          description: |-
+            Type of recipient address:
+            - `DESTINATION_CHAIN` - assets will be transferred to chain of `destinationAsset`
+            - `INTENTS` - assets will be transferred to account inside intents
           enum:
           - DESTINATION_CHAIN
           - INTENTS
           type: string
         deadline:
           description: "Timestamp in ISO format, that identifies when user refund\
-            \ will begin if swap was`t completed by then"
+            \ will begin if the swap isn't completed by then."
           example: 2019-08-24T14:15:22Z
           format: date-time
           type: string
         referral:
-          description: Referral identifier
+          description: Referral identifier(lower case only)
           example: referral
           type: string
         quoteWaitingTimeMs:
           default: 3000
           description: Time in milliseconds user is willing to wait for quote from
-            relay
+            relay.
           example: 3000
           type: number
+        appFees:
+          description: List of recipients and their fees
+          items:
+            $ref: '#/components/schemas/AppFee'
+          type: array
       required:
       - amount
       - deadline
@@ -284,36 +351,37 @@ components:
       properties:
         depositAddress:
           description: |-
-            Deposit address on chain of **originAsset** in case **depositType** is **ORIGIN_CHAIN**.
-                  Deposit address inside near intents in case **depositType** is **INTENTS**.
+            The deposit address on the chain of `originAsset` in case if `depositType` is `ORIGIN_CHAIN`.
+
+            The deposit address inside of near intents (the verifier smart contract) in case if `depositType` is `INTENTS`.
           example: 0x76b4c56085ED136a8744D52bE956396624a730E8
           type: string
         amountIn:
-          description: Amount of origin asset
+          description: Amount of the origin asset
           example: "1000000"
           type: string
         amountInFormatted:
-          description: Amount of origin asset in readable format
+          description: Amount of the origin asset in readable format
           example: "1"
           type: string
         amountInUsd:
-          description: Amount of origin assets equivalent in USD
+          description: Amount of the origin assets equivalent in USD
           example: "1"
           type: string
         minAmountIn:
-          description: Minimum amount of origin asset that will be used for swap
+          description: Minimum amount of the origin asset that will be used for swap
           example: "995000"
           type: string
         amountOut:
-          description: Amount of destination asset
+          description: Amount of the destination asset
           example: "9950000"
           type: string
         amountOutFormatted:
-          description: Amount of destination asset in readable format
+          description: Amount of the destination asset in readable format
           example: "9.95"
           type: string
         amountOutUsd:
-          description: Amount of destination asset equivalent in USD
+          description: Amount of the destination asset equivalent in USD
           example: "9.95"
           type: string
         minAmountOut:
@@ -321,19 +389,19 @@ components:
           example: "9900000"
           type: string
         deadline:
-          description: Time when deposit address will become inactive and funds might
-            be lost
+          description: Time when the deposit address will become inactive and funds
+            might be lost
           example: 2025-03-04T15:00:00Z
           format: date-time
           type: string
         timeWhenInactive:
-          description: Time when deposit address will become cold and swap processing
+          description: Time when the deposit address will become cold and swap processing
             will take more time
           example: 2025-03-04T15:00:00Z
           format: date-time
           type: string
         timeEstimate:
-          description: Estimated time in seconds for swap to be executed after user
+          description: Estimated time in seconds for swap to be executed after the
             deposit transaction is confirmed
           example: 120
           type: number
@@ -355,13 +423,15 @@ components:
         timestamp: 2019-08-24T14:15:22Z
       properties:
         timestamp:
-          description: Timestamp in ISO format that took part in deposit address derivation
+          description: Timestamp in ISO format that took part in the deposit address
+            derivation
           example: 2019-08-24T14:15:22Z
           format: date-time
           type: string
         signature:
-          description: Signature that means 1click service commit to quote and deposit
-            address
+          description: Signature of the 1Click service confirming the quote for the
+            specific deposit address. Must be saved on the client side (along with
+            the whole quote) in order to resolve any disputes or mistakes.
           type: string
         quoteRequest:
           allOf:
@@ -370,8 +440,8 @@ components:
         quote:
           allOf:
           - $ref: '#/components/schemas/Quote'
-          description: Response that contains deposit address for user to send "amount"
-            of **originAsset** and possible output amount
+          description: Response that contains the deposit address to send "amount"
+            of `originAsset` and possible output amount.
       required:
       - quote
       - quoteRequest
@@ -414,28 +484,28 @@ components:
             type: string
           type: array
         amountIn:
-          description: Exact amount of **originToken** after trade was settled
+          description: Exact amount of `originToken` after trade was settled
           example: "1000"
           type: string
         amountInFormatted:
-          description: Exact amount of **originToken** after trade was settled in
-            readable format
+          description: Exact amount of `originToken` after trade was settled in readable
+            format
           example: "0.1"
           type: string
         amountInUsd:
-          description: Exact amount of **originToken** equivalent in USD
+          description: Exact amount of `originToken` equivalent in USD
           example: "0.1"
           type: string
         amountOut:
-          description: Exact amount of **destinationToken** after trade was settled
+          description: Exact amount of `destinationToken` after trade was settled
           example: "9950000"
           type: string
         amountOutFormatted:
-          description: Exact amount of **destinationToken** in readable format
+          description: Exact amount of `destinationToken` in readable format
           example: "9.95"
           type: string
         amountOutUsd:
-          description: Exact amount of **destinationToken** equivalent in USD
+          description: Exact amount of `destinationToken` equivalent in USD
           example: "9.95"
           type: string
         slippage:
@@ -443,18 +513,19 @@ components:
           example: 50
           type: number
         originChainTxHashes:
-          description: Hashes and explorer URLs for all transactions on origin chain
+          description: Hashes and explorer URLs for all transactions on the origin
+            chain
           items:
             $ref: '#/components/schemas/TransactionDetails'
           type: array
         destinationChainTxHashes:
-          description: Hashes and explorer URLs for all transactions on destination
+          description: Hashes and explorer URLs for all transactions on the destination
             chain
           items:
             $ref: '#/components/schemas/TransactionDetails'
           type: array
         refundedAmount:
-          description: Amount of **originAsset** that got transferred to **refundTo**
+          description: Amount of `originAsset` that got transferred to `refundTo`
           example: "1000"
           type: string
         refundedAmountFormatted:
@@ -558,3 +629,11 @@ components:
       - swapDetails
       - updatedAt
       type: object
+  securitySchemes:
+    JWT-auth:
+      bearerFormat: JWT
+      description: Enter JWT token (optional)
+      in: header
+      name: JWT
+      scheme: bearer
+      type: http

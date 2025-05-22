@@ -25,25 +25,25 @@ type SwapDetails struct {
 	IntentHashes []string `json:"intentHashes"`
 	// All Near transactions executed for this swap
 	NearTxHashes []string `json:"nearTxHashes"`
-	// Exact amount of **originToken** after trade was settled
+	// Exact amount of `originToken` after trade was settled
 	AmountIn *string `json:"amountIn,omitempty"`
-	// Exact amount of **originToken** after trade was settled in readable format
+	// Exact amount of `originToken` after trade was settled in readable format
 	AmountInFormatted *string `json:"amountInFormatted,omitempty"`
-	// Exact amount of **originToken** equivalent in USD
+	// Exact amount of `originToken` equivalent in USD
 	AmountInUsd *string `json:"amountInUsd,omitempty"`
-	// Exact amount of **destinationToken** after trade was settled
+	// Exact amount of `destinationToken` after trade was settled
 	AmountOut *string `json:"amountOut,omitempty"`
-	// Exact amount of **destinationToken** in readable format
+	// Exact amount of `destinationToken` in readable format
 	AmountOutFormatted *string `json:"amountOutFormatted,omitempty"`
-	// Exact amount of **destinationToken** equivalent in USD
+	// Exact amount of `destinationToken` equivalent in USD
 	AmountOutUsd *string `json:"amountOutUsd,omitempty"`
 	// Actual slippage
 	Slippage *float32 `json:"slippage,omitempty"`
-	// Hashes and explorer URLs for all transactions on origin chain
+	// Hashes and explorer URLs for all transactions on the origin chain
 	OriginChainTxHashes []TransactionDetails `json:"originChainTxHashes"`
-	// Hashes and explorer URLs for all transactions on destination chain
+	// Hashes and explorer URLs for all transactions on the destination chain
 	DestinationChainTxHashes []TransactionDetails `json:"destinationChainTxHashes"`
-	// Amount of **originAsset** that got transferred to **refundTo**
+	// Amount of `originAsset` that got transferred to `refundTo`
 	RefundedAmount *string `json:"refundedAmount,omitempty"`
 	// Refunded amount in readable format
 	RefundedAmountFormatted *string `json:"refundedAmountFormatted,omitempty"`

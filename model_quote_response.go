@@ -22,13 +22,13 @@ var _ MappedNullable = &QuoteResponse{}
 
 // QuoteResponse struct for QuoteResponse
 type QuoteResponse struct {
-	// Timestamp in ISO format that took part in deposit address derivation
+	// Timestamp in ISO format that took part in the deposit address derivation
 	Timestamp time.Time `json:"timestamp"`
-	// Signature that means 1click service commit to quote and deposit address
+	// Signature of the 1Click service confirming the quote for the specific deposit address. Must be saved on the client side (along with the whole quote) in order to resolve any disputes or mistakes.
 	Signature string `json:"signature"`
 	// User request
 	QuoteRequest QuoteRequest `json:"quoteRequest"`
-	// Response that contains deposit address for user to send \"amount\" of **originAsset** and possible output amount
+	// Response that contains the deposit address to send \"amount\" of `originAsset` and possible output amount.
 	Quote Quote `json:"quote"`
 }
 

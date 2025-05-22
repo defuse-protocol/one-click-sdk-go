@@ -4,20 +4,21 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Dry** | **bool** |    Flag indicating whether this is a dry run request.    If **true**, the response will **NOT** contain the following fields:       **depositAddress**           **timeWhenInactive**           **timeEstimate**           **deadline**    | 
-**SwapType** | **string** | Whether to use the amount as the output or the input for the basis of the swap.     EXACT_OUTPUT: the **refundTo** address will always receive excess tokens back even after the swap is complete.    | 
+**Dry** | **bool** | Flag indicating whether this is a dry run request. If &#x60;true&#x60;, the response will **NOT** contain the following fields: - &#x60;depositAddress&#x60; - &#x60;timeWhenInactive&#x60; - &#x60;timeEstimate&#x60; - &#x60;deadline&#x60; | 
+**SwapType** | **string** | Whether to use the amount as the output or the input for the basis of the swap: - &#x60;EXACT_INPUT&#x60; - request output amount for exact input. - &#x60;EXACT_OUTPUT&#x60; - request output amount for exact output. The &#x60;refundTo&#x60; address will always receive excess tokens back even after the swap is complete. | 
 **SlippageTolerance** | **float32** | Slippage tolerance for the swap. This value is in basis points (1/100th of a percent), e.g. 100 for 1% slippage. | 
-**OriginAsset** | **string** | ID of origin asset | 
-**DepositType** | **string** | Type of deposit address      ORIGIN_CHAIN - deposit address on origin chain      INTENTS - **accountId** inside near intents to which you should transfer assets inside intents. | 
-**DestinationAsset** | **string** | ID of destination asset | 
-**Amount** | **string** | Amount to swap as the base amount (can be switched to exact input/output using the dedicated flag), denoted in the smallest unit of the specified currency (e.g., wei for ETH) | 
-**RefundTo** | **string** | Address for user refund | 
-**RefundType** | **string** | Type of refund address       ORIGIN_CHAIN - assets will be refunded to **refundTo** address on origin chain        INTENTS - assets will be refunded to **refundTo** intents account | 
-**Recipient** | **string** | Recipient address, format should match **recipientType** | 
-**RecipientType** | **string** | Type of recipient address       DESTINATION_CHAIN - assets will be transferred to chain of **destinationAsset**        INTENTS - assets will be transferred to account inside intents | 
-**Deadline** | **time.Time** | Timestamp in ISO format, that identifies when user refund will begin if swap was&#x60;t completed by then | 
-**Referral** | Pointer to **string** | Referral identifier | [optional] 
-**QuoteWaitingTimeMs** | Pointer to **float32** | Time in milliseconds user is willing to wait for quote from relay | [optional] [default to 3000]
+**OriginAsset** | **string** | ID of the origin asset. | 
+**DepositType** | **string** | Type of the deposit address: - &#x60;ORIGIN_CHAIN&#x60; - deposit address on the origin chain - &#x60;INTENTS&#x60; - **account ID** inside near intents to which you should transfer assets inside intents. | 
+**DestinationAsset** | **string** | ID of the destination asset. | 
+**Amount** | **string** | Amount to swap as the base amount (can be switched to exact input/output using the dedicated flag), denoted in the smallest unit of the specified currency (e.g., wei for ETH). | 
+**RefundTo** | **string** | Address for user refund. | 
+**RefundType** | **string** | Type of refund address: - &#x60;ORIGIN_CHAIN&#x60; - assets will be refunded to &#x60;refundTo&#x60; address on the origin chain - &#x60;INTENTS&#x60; - assets will be refunded to &#x60;refundTo&#x60; intents account | 
+**Recipient** | **string** | Recipient address. The format should match &#x60;recipientType&#x60;. | 
+**RecipientType** | **string** | Type of recipient address: - &#x60;DESTINATION_CHAIN&#x60; - assets will be transferred to chain of &#x60;destinationAsset&#x60; - &#x60;INTENTS&#x60; - assets will be transferred to account inside intents | 
+**Deadline** | **time.Time** | Timestamp in ISO format, that identifies when user refund will begin if the swap isn&#39;t completed by then. | 
+**Referral** | Pointer to **string** | Referral identifier(lower case only) | [optional] 
+**QuoteWaitingTimeMs** | Pointer to **float32** | Time in milliseconds user is willing to wait for quote from relay. | [optional] [default to 3000]
+**AppFees** | Pointer to [**[]AppFee**](AppFee.md) | List of recipients and their fees | [optional] 
 
 ## Methods
 
@@ -327,6 +328,31 @@ SetQuoteWaitingTimeMs sets QuoteWaitingTimeMs field to given value.
 `func (o *QuoteRequest) HasQuoteWaitingTimeMs() bool`
 
 HasQuoteWaitingTimeMs returns a boolean if a field has been set.
+
+### GetAppFees
+
+`func (o *QuoteRequest) GetAppFees() []AppFee`
+
+GetAppFees returns the AppFees field if non-nil, zero value otherwise.
+
+### GetAppFeesOk
+
+`func (o *QuoteRequest) GetAppFeesOk() (*[]AppFee, bool)`
+
+GetAppFeesOk returns a tuple with the AppFees field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAppFees
+
+`func (o *QuoteRequest) SetAppFees(v []AppFee)`
+
+SetAppFees sets AppFees field to given value.
+
+### HasAppFees
+
+`func (o *QuoteRequest) HasAppFees() bool`
+
+HasAppFees returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

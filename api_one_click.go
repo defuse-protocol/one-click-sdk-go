@@ -37,7 +37,11 @@ func (r ApiGetExecutionStatusRequest) Execute() (*GetExecutionStatusResponse, *h
 }
 
 /*
-GetExecutionStatus Returns execution status for a given deposit address
+GetExecutionStatus Check swap execution status
+
+Retrieves the current status of a swap using the unique deposit address from the quote.
+
+The response includes the state of the swap (e.g., pending, processing, success, refunded) and any associated swap and transaction details.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetExecutionStatusRequest
@@ -155,7 +159,15 @@ func (r ApiGetQuoteRequest) Execute() (*QuoteResponse, *http.Response, error) {
 }
 
 /*
-GetQuote Returns the best quote with deposit address
+GetQuote Request a swap quote
+
+Generates a swap quote based on input parameters such as the assets, amount, slippage tolerance, and recipient/refund information.
+
+Returns pricing details, estimated time, and a unique **deposit address** to which tokens must be transferred to initiate the swap.
+
+You can set the `dry` parameter to `true` to simulate the quote request **without generating a deposit address** or initiating the swap process. This is useful for previewing swap parameters or validating input data without committing to an actual swap.
+
+This endpoint is the first required step in the swap process.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetQuoteRequest
@@ -242,6 +254,7 @@ func (a *OneClickAPIService) GetQuoteExecute(r ApiGetQuoteRequest) (*QuoteRespon
 			}
 			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
 			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
@@ -268,7 +281,11 @@ func (r ApiGetTokensRequest) Execute() ([]TokenResponse, *http.Response, error) 
 }
 
 /*
-GetTokens Returns tokens that can be swapped
+GetTokens Get supported tokens
+
+Retrieves a list of tokens currently supported by the 1Click API for asset swaps.
+
+Each token entry includes its blockchain, contract address (if available), price in USD, and other metadata such as symbol and decimals.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetTokensRequest
@@ -372,7 +389,11 @@ func (r ApiSubmitDepositTxRequest) Execute() (*SubmitDepositTxResponse, *http.Re
 }
 
 /*
-SubmitDepositTx Submit a deposit transaction
+SubmitDepositTx Submit deposit transaction hash
+
+Optionally notifies the 1Click service that a deposit has been sent to the specified address, using the blockchain transaction hash.
+
+This step can speed up swap processing by allowing the system to preemptively verify the deposit.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiSubmitDepositTxRequest
@@ -459,6 +480,7 @@ func (a *OneClickAPIService) SubmitDepositTxExecute(r ApiSubmitDepositTxRequest)
 			}
 			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
 			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

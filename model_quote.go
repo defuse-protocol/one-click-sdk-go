@@ -22,29 +22,29 @@ var _ MappedNullable = &Quote{}
 
 // Quote struct for Quote
 type Quote struct {
-	// Deposit address on chain of **originAsset** in case **depositType** is **ORIGIN_CHAIN**.       Deposit address inside near intents in case **depositType** is **INTENTS**.
+	// The deposit address on the chain of `originAsset` in case if `depositType` is `ORIGIN_CHAIN`.  The deposit address inside of near intents (the verifier smart contract) in case if `depositType` is `INTENTS`.
 	DepositAddress *string `json:"depositAddress,omitempty"`
-	// Amount of origin asset
+	// Amount of the origin asset
 	AmountIn string `json:"amountIn"`
-	// Amount of origin asset in readable format
+	// Amount of the origin asset in readable format
 	AmountInFormatted string `json:"amountInFormatted"`
-	// Amount of origin assets equivalent in USD
+	// Amount of the origin assets equivalent in USD
 	AmountInUsd string `json:"amountInUsd"`
-	// Minimum amount of origin asset that will be used for swap
+	// Minimum amount of the origin asset that will be used for swap
 	MinAmountIn string `json:"minAmountIn"`
-	// Amount of destination asset
+	// Amount of the destination asset
 	AmountOut string `json:"amountOut"`
-	// Amount of destination asset in readable format
+	// Amount of the destination asset in readable format
 	AmountOutFormatted string `json:"amountOutFormatted"`
-	// Amount of destination asset equivalent in USD
+	// Amount of the destination asset equivalent in USD
 	AmountOutUsd string `json:"amountOutUsd"`
 	// Minimum amount with slippage taken into account
 	MinAmountOut string `json:"minAmountOut"`
-	// Time when deposit address will become inactive and funds might be lost
+	// Time when the deposit address will become inactive and funds might be lost
 	Deadline *time.Time `json:"deadline,omitempty"`
-	// Time when deposit address will become cold and swap processing will take more time
+	// Time when the deposit address will become cold and swap processing will take more time
 	TimeWhenInactive *time.Time `json:"timeWhenInactive,omitempty"`
-	// Estimated time in seconds for swap to be executed after user deposit transaction is confirmed
+	// Estimated time in seconds for swap to be executed after the deposit transaction is confirmed
 	TimeEstimate *float32 `json:"timeEstimate,omitempty"`
 }
 

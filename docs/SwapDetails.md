@@ -6,16 +6,16 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **IntentHashes** | **[]string** | All intent hashes that took part in this swap | 
 **NearTxHashes** | **[]string** | All Near transactions executed for this swap | 
-**AmountIn** | Pointer to **string** | Exact amount of **originToken** after trade was settled | [optional] 
-**AmountInFormatted** | Pointer to **string** | Exact amount of **originToken** after trade was settled in readable format | [optional] 
-**AmountInUsd** | Pointer to **string** | Exact amount of **originToken** equivalent in USD | [optional] 
-**AmountOut** | Pointer to **string** | Exact amount of **destinationToken** after trade was settled | [optional] 
-**AmountOutFormatted** | Pointer to **string** | Exact amount of **destinationToken** in readable format | [optional] 
-**AmountOutUsd** | Pointer to **string** | Exact amount of **destinationToken** equivalent in USD | [optional] 
+**AmountIn** | Pointer to **string** | Exact amount of &#x60;originToken&#x60; after trade was settled | [optional] 
+**AmountInFormatted** | Pointer to **string** | Exact amount of &#x60;originToken&#x60; after trade was settled in readable format | [optional] 
+**AmountInUsd** | Pointer to **string** | Exact amount of &#x60;originToken&#x60; equivalent in USD | [optional] 
+**AmountOut** | Pointer to **string** | Exact amount of &#x60;destinationToken&#x60; after trade was settled | [optional] 
+**AmountOutFormatted** | Pointer to **string** | Exact amount of &#x60;destinationToken&#x60; in readable format | [optional] 
+**AmountOutUsd** | Pointer to **string** | Exact amount of &#x60;destinationToken&#x60; equivalent in USD | [optional] 
 **Slippage** | Pointer to **float32** | Actual slippage | [optional] 
-**OriginChainTxHashes** | [**[]TransactionDetails**](TransactionDetails.md) | Hashes and explorer URLs for all transactions on origin chain | 
-**DestinationChainTxHashes** | [**[]TransactionDetails**](TransactionDetails.md) | Hashes and explorer URLs for all transactions on destination chain | 
-**RefundedAmount** | Pointer to **string** | Amount of **originAsset** that got transferred to **refundTo** | [optional] 
+**OriginChainTxHashes** | [**[]TransactionDetails**](TransactionDetails.md) | Hashes and explorer URLs for all transactions on the origin chain | 
+**DestinationChainTxHashes** | [**[]TransactionDetails**](TransactionDetails.md) | Hashes and explorer URLs for all transactions on the destination chain | 
+**RefundedAmount** | Pointer to **string** | Amount of &#x60;originAsset&#x60; that got transferred to &#x60;refundTo&#x60; | [optional] 
 **RefundedAmountFormatted** | Pointer to **string** | Refunded amount in readable format | [optional] 
 **RefundedAmountUsd** | Pointer to **string** | Refunded amount equivalent in USD | [optional] 
 

@@ -4,18 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**DepositAddress** | Pointer to **string** | Deposit address on chain of **originAsset** in case **depositType** is **ORIGIN_CHAIN**.       Deposit address inside near intents in case **depositType** is **INTENTS**. | [optional] 
-**AmountIn** | **string** | Amount of origin asset | 
-**AmountInFormatted** | **string** | Amount of origin asset in readable format | 
-**AmountInUsd** | **string** | Amount of origin assets equivalent in USD | 
-**MinAmountIn** | **string** | Minimum amount of origin asset that will be used for swap | 
-**AmountOut** | **string** | Amount of destination asset | 
-**AmountOutFormatted** | **string** | Amount of destination asset in readable format | 
-**AmountOutUsd** | **string** | Amount of destination asset equivalent in USD | 
+**DepositAddress** | Pointer to **string** | The deposit address on the chain of &#x60;originAsset&#x60; in case if &#x60;depositType&#x60; is &#x60;ORIGIN_CHAIN&#x60;.  The deposit address inside of near intents (the verifier smart contract) in case if &#x60;depositType&#x60; is &#x60;INTENTS&#x60;. | [optional] 
+**AmountIn** | **string** | Amount of the origin asset | 
+**AmountInFormatted** | **string** | Amount of the origin asset in readable format | 
+**AmountInUsd** | **string** | Amount of the origin assets equivalent in USD | 
+**MinAmountIn** | **string** | Minimum amount of the origin asset that will be used for swap | 
+**AmountOut** | **string** | Amount of the destination asset | 
+**AmountOutFormatted** | **string** | Amount of the destination asset in readable format | 
+**AmountOutUsd** | **string** | Amount of the destination asset equivalent in USD | 
 **MinAmountOut** | **string** | Minimum amount with slippage taken into account | 
-**Deadline** | Pointer to **time.Time** | Time when deposit address will become inactive and funds might be lost | [optional] 
-**TimeWhenInactive** | Pointer to **time.Time** | Time when deposit address will become cold and swap processing will take more time | [optional] 
-**TimeEstimate** | Pointer to **float32** | Estimated time in seconds for swap to be executed after user deposit transaction is confirmed | [optional] 
+**Deadline** | Pointer to **time.Time** | Time when the deposit address will become inactive and funds might be lost | [optional] 
+**TimeWhenInactive** | Pointer to **time.Time** | Time when the deposit address will become cold and swap processing will take more time | [optional] 
+**TimeEstimate** | Pointer to **float32** | Estimated time in seconds for swap to be executed after the deposit transaction is confirmed | [optional] 
 
 ## Methods
 

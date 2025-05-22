@@ -25,10 +25,8 @@ openapi-generator-cli generate \
   -i "$TEMP_DIR/openapi.yaml" \
   --enable-post-process-file \
   --git-user-id defuse-protocol \
-  --git-repo-id one-click-sdk-go/v0 \
-  --package-name oneclick \
-  --additional-properties=packageVersion=v0 \
-  --output ./v0
+  --git-repo-id one-click-sdk-go \
+  --package-name oneclick
 
 # Commit and push changes
 echo "Committing changes..."
@@ -38,6 +36,8 @@ git add .
 git commit -m "Release: ${VERSION_NUMBER} version under /v0 path" || echo "No changes to commit"
 
 echo "Pushing changes..."
-git push
+git tag -a "v$VERSION_NUMBER" -m "Release v$VERSION_NUMBER"
+git push origin main
+git push origin "v$VERSION_NUMBER"
 
 echo "SDK regeneration and publishing completed successfully!"

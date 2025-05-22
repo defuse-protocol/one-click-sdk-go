@@ -22,34 +22,36 @@ var _ MappedNullable = &QuoteRequest{}
 
 // QuoteRequest struct for QuoteRequest
 type QuoteRequest struct {
-	//    Flag indicating whether this is a dry run request.    If **true**, the response will **NOT** contain the following fields:       **depositAddress**           **timeWhenInactive**           **timeEstimate**           **deadline**
+	// Flag indicating whether this is a dry run request. If `true`, the response will **NOT** contain the following fields: - `depositAddress` - `timeWhenInactive` - `timeEstimate` - `deadline`
 	Dry bool `json:"dry"`
-	// Whether to use the amount as the output or the input for the basis of the swap.     EXACT_OUTPUT: the **refundTo** address will always receive excess tokens back even after the swap is complete.
+	// Whether to use the amount as the output or the input for the basis of the swap: - `EXACT_INPUT` - request output amount for exact input. - `EXACT_OUTPUT` - request output amount for exact output. The `refundTo` address will always receive excess tokens back even after the swap is complete.
 	SwapType string `json:"swapType"`
 	// Slippage tolerance for the swap. This value is in basis points (1/100th of a percent), e.g. 100 for 1% slippage.
 	SlippageTolerance float32 `json:"slippageTolerance"`
-	// ID of origin asset
+	// ID of the origin asset.
 	OriginAsset string `json:"originAsset"`
-	// Type of deposit address      ORIGIN_CHAIN - deposit address on origin chain      INTENTS - **accountId** inside near intents to which you should transfer assets inside intents.
+	// Type of the deposit address: - `ORIGIN_CHAIN` - deposit address on the origin chain - `INTENTS` - **account ID** inside near intents to which you should transfer assets inside intents.
 	DepositType string `json:"depositType"`
-	// ID of destination asset
+	// ID of the destination asset.
 	DestinationAsset string `json:"destinationAsset"`
-	// Amount to swap as the base amount (can be switched to exact input/output using the dedicated flag), denoted in the smallest unit of the specified currency (e.g., wei for ETH)
+	// Amount to swap as the base amount (can be switched to exact input/output using the dedicated flag), denoted in the smallest unit of the specified currency (e.g., wei for ETH).
 	Amount string `json:"amount"`
-	// Address for user refund
+	// Address for user refund.
 	RefundTo string `json:"refundTo"`
-	// Type of refund address       ORIGIN_CHAIN - assets will be refunded to **refundTo** address on origin chain        INTENTS - assets will be refunded to **refundTo** intents account
+	// Type of refund address: - `ORIGIN_CHAIN` - assets will be refunded to `refundTo` address on the origin chain - `INTENTS` - assets will be refunded to `refundTo` intents account
 	RefundType string `json:"refundType"`
-	// Recipient address, format should match **recipientType**
+	// Recipient address. The format should match `recipientType`.
 	Recipient string `json:"recipient"`
-	// Type of recipient address       DESTINATION_CHAIN - assets will be transferred to chain of **destinationAsset**        INTENTS - assets will be transferred to account inside intents
+	// Type of recipient address: - `DESTINATION_CHAIN` - assets will be transferred to chain of `destinationAsset` - `INTENTS` - assets will be transferred to account inside intents
 	RecipientType string `json:"recipientType"`
-	// Timestamp in ISO format, that identifies when user refund will begin if swap was`t completed by then
+	// Timestamp in ISO format, that identifies when user refund will begin if the swap isn't completed by then.
 	Deadline time.Time `json:"deadline"`
-	// Referral identifier
+	// Referral identifier(lower case only)
 	Referral *string `json:"referral,omitempty"`
-	// Time in milliseconds user is willing to wait for quote from relay
+	// Time in milliseconds user is willing to wait for quote from relay.
 	QuoteWaitingTimeMs *float32 `json:"quoteWaitingTimeMs,omitempty"`
+	// List of recipients and their fees
+	AppFees []AppFee `json:"appFees,omitempty"`
 }
 
 type _QuoteRequest QuoteRequest
@@ -439,6 +441,38 @@ func (o *QuoteRequest) SetQuoteWaitingTimeMs(v float32) {
 	o.QuoteWaitingTimeMs = &v
 }
 
+// GetAppFees returns the AppFees field value if set, zero value otherwise.
+func (o *QuoteRequest) GetAppFees() []AppFee {
+	if o == nil || IsNil(o.AppFees) {
+		var ret []AppFee
+		return ret
+	}
+	return o.AppFees
+}
+
+// GetAppFeesOk returns a tuple with the AppFees field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *QuoteRequest) GetAppFeesOk() ([]AppFee, bool) {
+	if o == nil || IsNil(o.AppFees) {
+		return nil, false
+	}
+	return o.AppFees, true
+}
+
+// HasAppFees returns a boolean if a field has been set.
+func (o *QuoteRequest) HasAppFees() bool {
+	if o != nil && !IsNil(o.AppFees) {
+		return true
+	}
+
+	return false
+}
+
+// SetAppFees gets a reference to the given []AppFee and assigns it to the AppFees field.
+func (o *QuoteRequest) SetAppFees(v []AppFee) {
+	o.AppFees = v
+}
+
 func (o QuoteRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -466,6 +500,9 @@ func (o QuoteRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.QuoteWaitingTimeMs) {
 		toSerialize["quoteWaitingTimeMs"] = o.QuoteWaitingTimeMs
+	}
+	if !IsNil(o.AppFees) {
+		toSerialize["appFees"] = o.AppFees
 	}
 	return toSerialize, nil
 }

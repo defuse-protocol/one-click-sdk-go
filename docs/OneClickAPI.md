@@ -4,10 +4,10 @@ All URIs are relative to *https://1click.chaindefuser.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetExecutionStatus**](OneClickAPI.md#GetExecutionStatus) | **Get** /v0/status | Returns execution status for a given deposit address
-[**GetQuote**](OneClickAPI.md#GetQuote) | **Post** /v0/quote | Returns the best quote with deposit address
-[**GetTokens**](OneClickAPI.md#GetTokens) | **Get** /v0/tokens | Returns tokens that can be swapped
-[**SubmitDepositTx**](OneClickAPI.md#SubmitDepositTx) | **Post** /v0/deposit/submit | Submit a deposit transaction
+[**GetExecutionStatus**](OneClickAPI.md#GetExecutionStatus) | **Get** /v0/status | Check swap execution status
+[**GetQuote**](OneClickAPI.md#GetQuote) | **Post** /v0/quote | Request a swap quote
+[**GetTokens**](OneClickAPI.md#GetTokens) | **Get** /v0/tokens | Get supported tokens
+[**SubmitDepositTx**](OneClickAPI.md#SubmitDepositTx) | **Post** /v0/deposit/submit | Submit deposit transaction hash
 
 
 
@@ -15,7 +15,9 @@ Method | HTTP request | Description
 
 > GetExecutionStatusResponse GetExecutionStatus(ctx).DepositAddress(depositAddress).Execute()
 
-Returns execution status for a given deposit address
+Check swap execution status
+
+
 
 ### Example
 
@@ -63,7 +65,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[JWT-auth](../README.md#JWT-auth)
 
 ### HTTP request headers
 
@@ -79,7 +81,9 @@ No authorization required
 
 > QuoteResponse GetQuote(ctx).QuoteRequest(quoteRequest).Execute()
 
-Returns the best quote with deposit address
+Request a swap quote
+
+
 
 ### Example
 
@@ -128,7 +132,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[JWT-auth](../README.md#JWT-auth)
 
 ### HTTP request headers
 
@@ -144,7 +148,9 @@ No authorization required
 
 > []TokenResponse GetTokens(ctx).Execute()
 
-Returns tokens that can be swapped
+Get supported tokens
+
+
 
 ### Example
 
@@ -203,7 +209,9 @@ No authorization required
 
 > SubmitDepositTxResponse SubmitDepositTx(ctx).SubmitDepositTxRequest(submitDepositTxRequest).Execute()
 
-Submit a deposit transaction
+Submit deposit transaction hash
+
+
 
 ### Example
 
@@ -251,7 +259,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[JWT-auth](../README.md#JWT-auth)
 
 ### HTTP request headers
 

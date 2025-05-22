@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Timestamp** | **time.Time** | Timestamp in ISO format that took part in deposit address derivation | 
-**Signature** | **string** | Signature that means 1click service commit to quote and deposit address | 
+**Timestamp** | **time.Time** | Timestamp in ISO format that took part in the deposit address derivation | 
+**Signature** | **string** | Signature of the 1Click service confirming the quote for the specific deposit address. Must be saved on the client side (along with the whole quote) in order to resolve any disputes or mistakes. | 
 **QuoteRequest** | [**QuoteRequest**](QuoteRequest.md) | User request | 
-**Quote** | [**Quote**](Quote.md) | Response that contains deposit address for user to send \&quot;amount\&quot; of **originAsset** and possible output amount | 
+**Quote** | [**Quote**](Quote.md) | Response that contains the deposit address to send \&quot;amount\&quot; of &#x60;originAsset&#x60; and possible output amount. | 
 
 ## Methods
 

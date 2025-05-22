@@ -78,14 +78,15 @@ All URIs are relative to *https://1click.chaindefuser.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*OneClickAPI* | [**GetExecutionStatus**](docs/OneClickAPI.md#getexecutionstatus) | **Get** /v0/status | Returns execution status for a given deposit address
-*OneClickAPI* | [**GetQuote**](docs/OneClickAPI.md#getquote) | **Post** /v0/quote | Returns the best quote with deposit address
-*OneClickAPI* | [**GetTokens**](docs/OneClickAPI.md#gettokens) | **Get** /v0/tokens | Returns tokens that can be swapped
-*OneClickAPI* | [**SubmitDepositTx**](docs/OneClickAPI.md#submitdeposittx) | **Post** /v0/deposit/submit | Submit a deposit transaction
+*OneClickAPI* | [**GetExecutionStatus**](docs/OneClickAPI.md#getexecutionstatus) | **Get** /v0/status | Check swap execution status
+*OneClickAPI* | [**GetQuote**](docs/OneClickAPI.md#getquote) | **Post** /v0/quote | Request a swap quote
+*OneClickAPI* | [**GetTokens**](docs/OneClickAPI.md#gettokens) | **Get** /v0/tokens | Get supported tokens
+*OneClickAPI* | [**SubmitDepositTx**](docs/OneClickAPI.md#submitdeposittx) | **Post** /v0/deposit/submit | Submit deposit transaction hash
 
 
 ## Documentation For Models
 
+ - [AppFee](docs/AppFee.md)
  - [BadRequestResponse](docs/BadRequestResponse.md)
  - [GetExecutionStatusResponse](docs/GetExecutionStatusResponse.md)
  - [Quote](docs/Quote.md)
@@ -100,7 +101,18 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Authorization
 
-Endpoints do not require authorization.
+
+Authentication schemes defined for the API:
+### JWT-auth
+
+- **Type**: HTTP Bearer token authentication
+
+Example
+
+```go
+auth := context.WithValue(context.Background(), oneclick.ContextAccessToken, "BEARER_TOKEN_STRING")
+r, err := client.Service.Operation(auth, args)
+```
 
 
 ## Documentation for Utility Methods

@@ -5,6 +5,7 @@ api/openapi.yaml
 api_one_click.go
 client.go
 configuration.go
+docs/AppFee.md
 docs/BadRequestResponse.md
 docs/GetExecutionStatusResponse.md
 docs/OneClickAPI.md
@@ -19,6 +20,7 @@ docs/TransactionDetails.md
 git_push.sh
 go.mod
 go.sum
+model_app_fee.go
 model_bad_request_response.go
 model_get_execution_status_response.go
 model_quote.go
@@ -30,5 +32,4 @@ model_swap_details.go
 model_token_response.go
 model_transaction_details.go
 response.go
-test/api_one_click_test.go
 utils.go
