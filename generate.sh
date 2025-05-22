@@ -12,4 +12,5 @@
 export GO_POST_PROCESS_FILE="$(which gofmt) -w"
 
 openapi-generator-cli generate -g go -i ../1click-api/openapi.yaml --enable-post-process-file \
-  --git-user-id defuse-protocol --git-repo-id one-click-sdk-go --package-name oneclick
+  --git-user-id defuse-protocol --git-repo-id one-click-sdk-go/v0 --package-name oneclick \
+  --additional-properties=packageVersion=v0 --output ./v0

@@ -1,0 +1,42 @@
+name: Generate and Publish Go SDK
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'API version to generate SDK for'
+        required: false
+        type: string
+
+jobs:
+  generate-sdk:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+
+      - name: Get version
+        id: get-version
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          if [ -z "$VERSION" ] && [ -n "${{ github.event.client_payload.VERSION }}" ]; then
+            VERSION="${{ github.event.client_payload.VERSION }}"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Using API version: $VERSION"
+
+      - name: Generate and publish SDK
+        if: steps.get-version.outputs.version != ''
+        env:
+          API_VERSION: ${{ steps.get-version.outputs.version }}
+        run: |
+          chmod +x ./scripts/regenerate-and-publish.sh
+          ./scripts/regenerate-and-publish.sh
