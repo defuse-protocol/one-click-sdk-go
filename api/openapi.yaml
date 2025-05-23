@@ -245,7 +245,6 @@ components:
             If `true`, the response will **NOT** contain the following fields:
             - `depositAddress`
             - `timeWhenInactive`
-            - `timeEstimate`
             - `deadline`
           example: true
           type: boolean
@@ -414,6 +413,7 @@ components:
       - amountOutUsd
       - minAmountIn
       - minAmountOut
+      - timeEstimate
       type: object
     QuoteResponse:
       example:

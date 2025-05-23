@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Dry** | **bool** | Flag indicating whether this is a dry run request. If &#x60;true&#x60;, the response will **NOT** contain the following fields: - &#x60;depositAddress&#x60; - &#x60;timeWhenInactive&#x60; - &#x60;timeEstimate&#x60; - &#x60;deadline&#x60; | 
+**Dry** | **bool** | Flag indicating whether this is a dry run request. If &#x60;true&#x60;, the response will **NOT** contain the following fields: - &#x60;depositAddress&#x60; - &#x60;timeWhenInactive&#x60; - &#x60;deadline&#x60; | 
 **SwapType** | **string** | Whether to use the amount as the output or the input for the basis of the swap: - &#x60;EXACT_INPUT&#x60; - request output amount for exact input. - &#x60;EXACT_OUTPUT&#x60; - request output amount for exact output. The &#x60;refundTo&#x60; address will always receive excess tokens back even after the swap is complete. | 
 **SlippageTolerance** | **float32** | Slippage tolerance for the swap. This value is in basis points (1/100th of a percent), e.g. 100 for 1% slippage. | 
 **OriginAsset** | **string** | ID of the origin asset. | 

@@ -22,7 +22,7 @@ var _ MappedNullable = &QuoteRequest{}
 
 // QuoteRequest struct for QuoteRequest
 type QuoteRequest struct {
-	// Flag indicating whether this is a dry run request. If `true`, the response will **NOT** contain the following fields: - `depositAddress` - `timeWhenInactive` - `timeEstimate` - `deadline`
+	// Flag indicating whether this is a dry run request. If `true`, the response will **NOT** contain the following fields: - `depositAddress` - `timeWhenInactive` - `deadline`
 	Dry bool `json:"dry"`
 	// Whether to use the amount as the output or the input for the basis of the swap: - `EXACT_INPUT` - request output amount for exact input. - `EXACT_OUTPUT` - request output amount for exact output. The `refundTo` address will always receive excess tokens back even after the swap is complete.
 	SwapType string `json:"swapType"`

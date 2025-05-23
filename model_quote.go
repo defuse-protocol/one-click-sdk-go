@@ -45,7 +45,7 @@ type Quote struct {
 	// Time when the deposit address will become cold and swap processing will take more time
 	TimeWhenInactive *time.Time `json:"timeWhenInactive,omitempty"`
 	// Estimated time in seconds for swap to be executed after the deposit transaction is confirmed
-	TimeEstimate *float32 `json:"timeEstimate,omitempty"`
+	TimeEstimate float32 `json:"timeEstimate"`
 }
 
 type _Quote Quote
@@ -54,7 +54,7 @@ type _Quote Quote
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewQuote(amountIn string, amountInFormatted string, amountInUsd string, minAmountIn string, amountOut string, amountOutFormatted string, amountOutUsd string, minAmountOut string) *Quote {
+func NewQuote(amountIn string, amountInFormatted string, amountInUsd string, minAmountIn string, amountOut string, amountOutFormatted string, amountOutUsd string, minAmountOut string, timeEstimate float32) *Quote {
 	this := Quote{}
 	this.AmountIn = amountIn
 	this.AmountInFormatted = amountInFormatted
@@ -64,6 +64,7 @@ func NewQuote(amountIn string, amountInFormatted string, amountInUsd string, min
 	this.AmountOutFormatted = amountOutFormatted
 	this.AmountOutUsd = amountOutUsd
 	this.MinAmountOut = minAmountOut
+	this.TimeEstimate = timeEstimate
 	return &this
 }
 
@@ -363,36 +364,28 @@ func (o *Quote) SetTimeWhenInactive(v time.Time) {
 	o.TimeWhenInactive = &v
 }
 
-// GetTimeEstimate returns the TimeEstimate field value if set, zero value otherwise.
+// GetTimeEstimate returns the TimeEstimate field value
 func (o *Quote) GetTimeEstimate() float32 {
-	if o == nil || IsNil(o.TimeEstimate) {
+	if o == nil {
 		var ret float32
 		return ret
 	}
-	return *o.TimeEstimate
+
+	return o.TimeEstimate
 }
 
-// GetTimeEstimateOk returns a tuple with the TimeEstimate field value if set, nil otherwise
+// GetTimeEstimateOk returns a tuple with the TimeEstimate field value
 // and a boolean to check if the value has been set.
 func (o *Quote) GetTimeEstimateOk() (*float32, bool) {
-	if o == nil || IsNil(o.TimeEstimate) {
+	if o == nil {
 		return nil, false
 	}
-	return o.TimeEstimate, true
+	return &o.TimeEstimate, true
 }
 
-// HasTimeEstimate returns a boolean if a field has been set.
-func (o *Quote) HasTimeEstimate() bool {
-	if o != nil && !IsNil(o.TimeEstimate) {
-		return true
-	}
-
-	return false
-}
-
-// SetTimeEstimate gets a reference to the given float32 and assigns it to the TimeEstimate field.
+// SetTimeEstimate sets field value
 func (o *Quote) SetTimeEstimate(v float32) {
-	o.TimeEstimate = &v
+	o.TimeEstimate = v
 }
 
 func (o Quote) MarshalJSON() ([]byte, error) {
@@ -422,9 +415,7 @@ func (o Quote) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TimeWhenInactive) {
 		toSerialize["timeWhenInactive"] = o.TimeWhenInactive
 	}
-	if !IsNil(o.TimeEstimate) {
-		toSerialize["timeEstimate"] = o.TimeEstimate
-	}
+	toSerialize["timeEstimate"] = o.TimeEstimate
 	return toSerialize, nil
 }
 
@@ -441,6 +432,7 @@ func (o *Quote) UnmarshalJSON(data []byte) (err error) {
 		"amountOutFormatted",
 		"amountOutUsd",
 		"minAmountOut",
+		"timeEstimate",
 	}
 
 	allProperties := make(map[string]interface{})

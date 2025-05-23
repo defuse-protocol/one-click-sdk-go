@@ -15,13 +15,13 @@ Name | Type | Description | Notes
 **MinAmountOut** | **string** | Minimum amount with slippage taken into account | 
 **Deadline** | Pointer to **time.Time** | Time when the deposit address will become inactive and funds might be lost | [optional] 
 **TimeWhenInactive** | Pointer to **time.Time** | Time when the deposit address will become cold and swap processing will take more time | [optional] 
-**TimeEstimate** | Pointer to **float32** | Estimated time in seconds for swap to be executed after the deposit transaction is confirmed | [optional] 
+**TimeEstimate** | **float32** | Estimated time in seconds for swap to be executed after the deposit transaction is confirmed | 
 
 ## Methods
 
 ### NewQuote
 
-`func NewQuote(amountIn string, amountInFormatted string, amountInUsd string, minAmountIn string, amountOut string, amountOutFormatted string, amountOutUsd string, minAmountOut string, ) *Quote`
+`func NewQuote(amountIn string, amountInFormatted string, amountInUsd string, minAmountIn string, amountOut string, amountOutFormatted string, amountOutUsd string, minAmountOut string, timeEstimate float32, ) *Quote`
 
 NewQuote instantiates a new Quote object
 This constructor will assign default values to properties that have it defined,
@@ -290,11 +290,6 @@ and a boolean to check if the value has been set.
 
 SetTimeEstimate sets TimeEstimate field to given value.
 
-### HasTimeEstimate
-
-`func (o *Quote) HasTimeEstimate() bool`
-
-HasTimeEstimate returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
