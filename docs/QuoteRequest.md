@@ -15,8 +15,8 @@ Name | Type | Description | Notes
 **RefundType** | **string** | Type of refund address: - &#x60;ORIGIN_CHAIN&#x60; - assets will be refunded to &#x60;refundTo&#x60; address on the origin chain - &#x60;INTENTS&#x60; - assets will be refunded to &#x60;refundTo&#x60; intents account | 
 **Recipient** | **string** | Recipient address. The format should match &#x60;recipientType&#x60;. | 
 **RecipientType** | **string** | Type of recipient address: - &#x60;DESTINATION_CHAIN&#x60; - assets will be transferred to chain of &#x60;destinationAsset&#x60; - &#x60;INTENTS&#x60; - assets will be transferred to account inside intents | 
-**Deadline** | **time.Time** | Timestamp in ISO format, that identifies when user refund will begin if the swap isn&#39;t completed by then. | 
-**Referral** | Pointer to **string** | Referral identifier(lower case only) | [optional] 
+**Deadline** | **time.Time** | Timestamp in ISO format, that identifies when user refund will begin if the swap isn&#39;t completed by then. It needs to exceed the time required for the deposit tx to be minted, e.g. for Bitcoin it might require ~1h depending on the gas fees paid. | 
+**Referral** | Pointer to **string** | Referral identifier(lower case only). It will be reflected in the on-chain data and displayed on public analytics platforms. | [optional] 
 **QuoteWaitingTimeMs** | Pointer to **float32** | Time in milliseconds user is willing to wait for quote from relay. | [optional] [default to 3000]
 **AppFees** | Pointer to [**[]AppFee**](AppFee.md) | List of recipients and their fees | [optional] 
 
