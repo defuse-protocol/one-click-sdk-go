@@ -14,6 +14,8 @@ Name | Type | Description | Notes
 **RefundTo** | **string** | Address for user refund. | 
 **RefundType** | **string** | Type of refund address: - &#x60;ORIGIN_CHAIN&#x60; - assets will be refunded to &#x60;refundTo&#x60; address on the origin chain - &#x60;INTENTS&#x60; - assets will be refunded to &#x60;refundTo&#x60; intents account | 
 **Recipient** | **string** | Recipient address. The format should match &#x60;recipientType&#x60;. | 
+**VirtualChainRecipient** | Pointer to **string** | EVM address of a transfer recipient in a virtual chain | [optional] 
+**VirtualChainRefundRecipient** | Pointer to **string** | EVM address of a refund recipient in a virtual chain | [optional] 
 **RecipientType** | **string** | Type of recipient address: - &#x60;DESTINATION_CHAIN&#x60; - assets will be transferred to chain of &#x60;destinationAsset&#x60; - &#x60;INTENTS&#x60; - assets will be transferred to account inside intents | 
 **Deadline** | **time.Time** | Timestamp in ISO format, that identifies when user refund will begin if the swap isn&#39;t completed by then. It needs to exceed the time required for the deposit tx to be minted, e.g. for Bitcoin it might require ~1h depending on the gas fees paid. | 
 **Referral** | Pointer to **string** | Referral identifier(lower case only). It will be reflected in the on-chain data and displayed on public analytics platforms. | [optional] 
@@ -238,6 +240,56 @@ and a boolean to check if the value has been set.
 
 SetRecipient sets Recipient field to given value.
 
+
+### GetVirtualChainRecipient
+
+`func (o *QuoteRequest) GetVirtualChainRecipient() string`
+
+GetVirtualChainRecipient returns the VirtualChainRecipient field if non-nil, zero value otherwise.
+
+### GetVirtualChainRecipientOk
+
+`func (o *QuoteRequest) GetVirtualChainRecipientOk() (*string, bool)`
+
+GetVirtualChainRecipientOk returns a tuple with the VirtualChainRecipient field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVirtualChainRecipient
+
+`func (o *QuoteRequest) SetVirtualChainRecipient(v string)`
+
+SetVirtualChainRecipient sets VirtualChainRecipient field to given value.
+
+### HasVirtualChainRecipient
+
+`func (o *QuoteRequest) HasVirtualChainRecipient() bool`
+
+HasVirtualChainRecipient returns a boolean if a field has been set.
+
+### GetVirtualChainRefundRecipient
+
+`func (o *QuoteRequest) GetVirtualChainRefundRecipient() string`
+
+GetVirtualChainRefundRecipient returns the VirtualChainRefundRecipient field if non-nil, zero value otherwise.
+
+### GetVirtualChainRefundRecipientOk
+
+`func (o *QuoteRequest) GetVirtualChainRefundRecipientOk() (*string, bool)`
+
+GetVirtualChainRefundRecipientOk returns a tuple with the VirtualChainRefundRecipient field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVirtualChainRefundRecipient
+
+`func (o *QuoteRequest) SetVirtualChainRefundRecipient(v string)`
+
+SetVirtualChainRefundRecipient sets VirtualChainRefundRecipient field to given value.
+
+### HasVirtualChainRefundRecipient
+
+`func (o *QuoteRequest) HasVirtualChainRefundRecipient() bool`
+
+HasVirtualChainRefundRecipient returns a boolean if a field has been set.
 
 ### GetRecipientType
 

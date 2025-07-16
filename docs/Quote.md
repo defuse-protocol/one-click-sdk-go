@@ -16,6 +16,8 @@ Name | Type | Description | Notes
 **Deadline** | Pointer to **time.Time** | Time when the deposit address will become inactive and funds might be lost | [optional] 
 **TimeWhenInactive** | Pointer to **time.Time** | Time when the deposit address will become cold and swap processing will take more time | [optional] 
 **TimeEstimate** | **float32** | Estimated time in seconds for swap to be executed after the deposit transaction is confirmed | 
+**VirtualChainRecipient** | Pointer to **string** | EVM address of a transfer recipient in a virtual chain | [optional] 
+**VirtualChainRefundRecipient** | Pointer to **string** | EVM address of a refund recipient in a virtual chain | [optional] 
 
 ## Methods
 
@@ -290,6 +292,56 @@ and a boolean to check if the value has been set.
 
 SetTimeEstimate sets TimeEstimate field to given value.
 
+
+### GetVirtualChainRecipient
+
+`func (o *Quote) GetVirtualChainRecipient() string`
+
+GetVirtualChainRecipient returns the VirtualChainRecipient field if non-nil, zero value otherwise.
+
+### GetVirtualChainRecipientOk
+
+`func (o *Quote) GetVirtualChainRecipientOk() (*string, bool)`
+
+GetVirtualChainRecipientOk returns a tuple with the VirtualChainRecipient field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVirtualChainRecipient
+
+`func (o *Quote) SetVirtualChainRecipient(v string)`
+
+SetVirtualChainRecipient sets VirtualChainRecipient field to given value.
+
+### HasVirtualChainRecipient
+
+`func (o *Quote) HasVirtualChainRecipient() bool`
+
+HasVirtualChainRecipient returns a boolean if a field has been set.
+
+### GetVirtualChainRefundRecipient
+
+`func (o *Quote) GetVirtualChainRefundRecipient() string`
+
+GetVirtualChainRefundRecipient returns the VirtualChainRefundRecipient field if non-nil, zero value otherwise.
+
+### GetVirtualChainRefundRecipientOk
+
+`func (o *Quote) GetVirtualChainRefundRecipientOk() (*string, bool)`
+
+GetVirtualChainRefundRecipientOk returns a tuple with the VirtualChainRefundRecipient field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVirtualChainRefundRecipient
+
+`func (o *Quote) SetVirtualChainRefundRecipient(v string)`
+
+SetVirtualChainRefundRecipient sets VirtualChainRefundRecipient field to given value.
+
+### HasVirtualChainRefundRecipient
+
+`func (o *Quote) HasVirtualChainRefundRecipient() bool`
+
+HasVirtualChainRefundRecipient returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

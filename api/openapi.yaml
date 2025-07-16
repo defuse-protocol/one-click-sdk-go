@@ -3,7 +3,7 @@ info:
   contact: {}
   description: API for One-Click Swaps
   title: 1Click Swap API
-  version: 0.1.6
+  version: 0.1.7
 servers:
 - url: https://1click.chaindefuser.com
 paths:
@@ -173,6 +173,8 @@ components:
           - pol
           - tron
           - sui
+          - op
+          - avax
           example: near
           type: string
         symbol:
@@ -233,7 +235,9 @@ components:
         refundType: ORIGIN_CHAIN
         recipientType: DESTINATION_CHAIN
         referral: referral
+        virtualChainRefundRecipient: 0xb4c2fbec9d610F9A3a9b843c47b1A8095ceC887C
         recipient: 13QkxhNMrTPxoCkRdYdJ65tFuwXPhL5gLS2Z5Nr6gjRK
+        virtualChainRecipient: 0xb4c2fbec9d610F9A3a9b843c47b1A8095ceC887C
         slippageTolerance: 100
         deadline: 2019-08-24T14:15:22Z
         depositType: ORIGIN_CHAIN
@@ -302,6 +306,14 @@ components:
         recipient:
           description: Recipient address. The format should match `recipientType`.
           example: 13QkxhNMrTPxoCkRdYdJ65tFuwXPhL5gLS2Z5Nr6gjRK
+          type: string
+        virtualChainRecipient:
+          description: EVM address of a transfer recipient in a virtual chain
+          example: 0xb4c2fbec9d610F9A3a9b843c47b1A8095ceC887C
+          type: string
+        virtualChainRefundRecipient:
+          description: EVM address of a refund recipient in a virtual chain
+          example: 0xb4c2fbec9d610F9A3a9b843c47b1A8095ceC887C
           type: string
         recipientType:
           description: |-
@@ -408,6 +420,14 @@ components:
             deposit transaction is confirmed
           example: 120
           type: number
+        virtualChainRecipient:
+          description: EVM address of a transfer recipient in a virtual chain
+          example: 0xb4c2fbec9d610F9A3a9b843c47b1A8095ceC887C
+          type: string
+        virtualChainRefundRecipient:
+          description: EVM address of a refund recipient in a virtual chain
+          example: 0xb4c2fbec9d610F9A3a9b843c47b1A8095ceC887C
+          type: string
       required:
       - amountIn
       - amountInFormatted
