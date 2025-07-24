@@ -3,7 +3,7 @@ info:
   contact: {}
   description: API for One-Click Swaps
   title: 1Click Swap API
-  version: 0.1.7
+  version: 0.1.8
 servers:
 - url: https://1click.chaindefuser.com
 paths:
@@ -258,9 +258,11 @@ components:
             Whether to use the amount as the output or the input for the basis of the swap:
             - `EXACT_INPUT` - request output amount for exact input.
             - `EXACT_OUTPUT` - request output amount for exact output. The `refundTo` address will always receive excess tokens back even after the swap is complete.
+            - `FLEX_INPUT` - flexible input amount that allows for partial deposits and variable amounts.
           enum:
           - EXACT_INPUT
           - EXACT_OUTPUT
+          - FLEX_INPUT
           type: string
         slippageTolerance:
           description: "Slippage tolerance for the swap. This value is in basis points\
@@ -657,7 +659,5 @@ components:
     JWT-auth:
       bearerFormat: JWT
       description: Enter JWT token (optional)
-      in: header
-      name: JWT
       scheme: bearer
       type: http
