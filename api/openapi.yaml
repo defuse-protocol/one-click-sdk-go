@@ -175,6 +175,7 @@ components:
           - sui
           - op
           - avax
+          - cardano
           example: near
           type: string
         symbol:
