@@ -25,10 +25,16 @@ type ApiGetExecutionStatusRequest struct {
 	ctx            context.Context
 	ApiService     *OneClickAPIService
 	depositAddress *string
+	depositMemo    *string
 }
 
 func (r ApiGetExecutionStatusRequest) DepositAddress(depositAddress string) ApiGetExecutionStatusRequest {
 	r.depositAddress = &depositAddress
+	return r
+}
+
+func (r ApiGetExecutionStatusRequest) DepositMemo(depositMemo string) ApiGetExecutionStatusRequest {
+	r.depositMemo = &depositMemo
 	return r
 }
 
@@ -39,7 +45,7 @@ func (r ApiGetExecutionStatusRequest) Execute() (*GetExecutionStatusResponse, *h
 /*
 GetExecutionStatus Check swap execution status
 
-Retrieves the current status of a swap using the unique deposit address from the quote.
+Retrieves the current status of a swap using the unique deposit address from the quote, if quote response included deposit memo, it is required as well.
 
 The response includes the state of the swap (e.g., pending, processing, success, refunded) and any associated swap and transaction details.
 
@@ -79,6 +85,9 @@ func (a *OneClickAPIService) GetExecutionStatusExecute(r ApiGetExecutionStatusRe
 	}
 
 	parameterAddToHeaderOrQuery(localVarQueryParams, "depositAddress", r.depositAddress, "form", "")
+	if r.depositMemo != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "depositMemo", r.depositMemo, "form", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 

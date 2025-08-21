@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 ## GetExecutionStatus
 
-> GetExecutionStatusResponse GetExecutionStatus(ctx).DepositAddress(depositAddress).Execute()
+> GetExecutionStatusResponse GetExecutionStatus(ctx).DepositAddress(depositAddress).DepositMemo(depositMemo).Execute()
 
 Check swap execution status
 
@@ -33,10 +33,11 @@ import (
 
 func main() {
 	depositAddress := "depositAddress_example" // string | 
+	depositMemo := "depositMemo_example" // string |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.OneClickAPI.GetExecutionStatus(context.Background()).DepositAddress(depositAddress).Execute()
+	resp, r, err := apiClient.OneClickAPI.GetExecutionStatus(context.Background()).DepositAddress(depositAddress).DepositMemo(depositMemo).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `OneClickAPI.GetExecutionStatus``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -58,6 +59,7 @@ Other parameters are passed through a pointer to a apiGetExecutionStatusRequest 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **depositAddress** | **string** |  | 
+ **depositMemo** | **string** |  | 
 
 ### Return type
 

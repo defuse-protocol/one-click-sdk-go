@@ -68,7 +68,7 @@ paths:
   /v0/status:
     get:
       description: |-
-        Retrieves the current status of a swap using the unique deposit address from the quote.
+        Retrieves the current status of a swap using the unique deposit address from the quote, if quote response included deposit memo, it is required as well.
 
         The response includes the state of the swap (e.g., pending, processing, success, refunded) and any associated swap and transaction details.
       operationId: getExecutionStatus
@@ -77,6 +77,13 @@ paths:
         in: query
         name: depositAddress
         required: true
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: depositMemo
+        required: false
         schema:
           type: string
         style: form
