@@ -4,18 +4,19 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**DepositAddress** | Pointer to **string** | The deposit address on the chain of &#x60;originAsset&#x60; in case if &#x60;depositType&#x60; is &#x60;ORIGIN_CHAIN&#x60;.  The deposit address inside of near intents (the verifier smart contract) in case if &#x60;depositType&#x60; is &#x60;INTENTS&#x60;. | [optional] 
+**DepositAddress** | Pointer to **string** | The deposit address on the chain of &#x60;originAsset&#x60; when &#x60;depositType&#x60; is &#x60;ORIGIN_CHAIN&#x60;.  The deposit address inside NEAR Intents (the verifier smart contract) when &#x60;depositType&#x60; is &#x60;INTENTS&#x60;. | [optional] 
+**DepositMemo** | Pointer to **string** | Some of the deposit addresses **REQUIRE** to also include the &#x60;memo&#x60; for the deposit to be processed | [optional] 
 **AmountIn** | **string** | Amount of the origin asset | 
 **AmountInFormatted** | **string** | Amount of the origin asset in readable format | 
 **AmountInUsd** | **string** | Amount of the origin assets equivalent in USD | 
-**MinAmountIn** | **string** | Minimum amount of the origin asset that will be used for swap | 
+**MinAmountIn** | **string** | Minimum amount of the origin asset that will be used for the swap | 
 **AmountOut** | **string** | Amount of the destination asset | 
 **AmountOutFormatted** | **string** | Amount of the destination asset in readable format | 
 **AmountOutUsd** | **string** | Amount of the destination asset equivalent in USD | 
-**MinAmountOut** | **string** | Minimum amount with slippage taken into account | 
-**Deadline** | Pointer to **time.Time** | Time when the deposit address will become inactive and funds might be lost | [optional] 
-**TimeWhenInactive** | Pointer to **time.Time** | Time when the deposit address will become cold and swap processing will take more time | [optional] 
-**TimeEstimate** | **float32** | Estimated time in seconds for swap to be executed after the deposit transaction is confirmed | 
+**MinAmountOut** | **string** | Minimum output amount after slippage is applied | 
+**Deadline** | Pointer to **time.Time** | Time when the deposit address becomes inactive and funds may be lost | [optional] 
+**TimeWhenInactive** | Pointer to **time.Time** | Time when the deposit address becomes cold, causing swap processing to take longer | [optional] 
+**TimeEstimate** | **float32** | Estimated time in seconds for the swap to be executed after the deposit transaction is confirmed | 
 **VirtualChainRecipient** | Pointer to **string** | EVM address of a transfer recipient in a virtual chain | [optional] 
 **VirtualChainRefundRecipient** | Pointer to **string** | EVM address of a refund recipient in a virtual chain | [optional] 
 
@@ -62,6 +63,31 @@ SetDepositAddress sets DepositAddress field to given value.
 `func (o *Quote) HasDepositAddress() bool`
 
 HasDepositAddress returns a boolean if a field has been set.
+
+### GetDepositMemo
+
+`func (o *Quote) GetDepositMemo() string`
+
+GetDepositMemo returns the DepositMemo field if non-nil, zero value otherwise.
+
+### GetDepositMemoOk
+
+`func (o *Quote) GetDepositMemoOk() (*string, bool)`
+
+GetDepositMemoOk returns a tuple with the DepositMemo field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDepositMemo
+
+`func (o *Quote) SetDepositMemo(v string)`
+
+SetDepositMemo sets DepositMemo field to given value.
+
+### HasDepositMemo
+
+`func (o *Quote) HasDepositMemo() bool`
+
+HasDepositMemo returns a boolean if a field has been set.
 
 ### GetAmountIn
 

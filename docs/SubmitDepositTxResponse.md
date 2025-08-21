@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**QuoteResponse** | [**QuoteResponse**](QuoteResponse.md) | Quote response from original request | 
+**QuoteResponse** | [**QuoteResponse**](QuoteResponse.md) | Quote response from the original request | 
 **Status** | **string** |  | 
 **UpdatedAt** | **time.Time** | Last time the state was updated | 
 **SwapDetails** | [**SwapDetails**](SwapDetails.md) | Details of actual swaps and withdrawals | 

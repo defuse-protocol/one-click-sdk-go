@@ -5,21 +5,22 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Dry** | **bool** | Flag indicating whether this is a dry run request. If &#x60;true&#x60;, the response will **NOT** contain the following fields: - &#x60;depositAddress&#x60; - &#x60;timeWhenInactive&#x60; - &#x60;deadline&#x60; | 
-**SwapType** | **string** | Whether to use the amount as the output or the input for the basis of the swap: - &#x60;EXACT_INPUT&#x60; - request output amount for exact input. - &#x60;EXACT_OUTPUT&#x60; - request output amount for exact output. The &#x60;refundTo&#x60; address will always receive excess tokens back even after the swap is complete. - &#x60;FLEX_INPUT&#x60; - flexible input amount that allows for partial deposits and variable amounts. | 
+**DepositMode** | Pointer to **string** | What deposit address mode you will get in the response, most chain supports only &#x60;SIMPLE&#x60; and some(for example &#x60;stellar&#x60;) only &#x60;MEMO&#x60;: - &#x60;SIMPLE&#x60; - usual deposit with only deposit address. - &#x60;MEMO&#x60; - some chains will **REQUIRE** the &#x60;memo&#x60; together with &#x60;depositAddress&#x60; for swap to work. | [optional] [default to "SIMPLE"]
+**SwapType** | **string** | How to interpret &#x60;amount&#x60; when performing the swap:   - &#x60;EXACT_INPUT&#x60; - requests the output amount for an exact input.   - &#x60;EXACT_OUTPUT&#x60; - requests the input amount for an exact output. The &#x60;refundTo&#x60; address always receives any excess tokens after the swap is complete.   - &#x60;FLEX_INPUT&#x60; - a flexible input amount that allows for partial deposits and variable amounts. | 
 **SlippageTolerance** | **float32** | Slippage tolerance for the swap. This value is in basis points (1/100th of a percent), e.g. 100 for 1% slippage. | 
 **OriginAsset** | **string** | ID of the origin asset. | 
-**DepositType** | **string** | Type of the deposit address: - &#x60;ORIGIN_CHAIN&#x60; - deposit address on the origin chain - &#x60;INTENTS&#x60; - **account ID** inside near intents to which you should transfer assets inside intents. | 
+**DepositType** | **string** | Type of deposit address: - &#x60;ORIGIN_CHAIN&#x60; - deposit address on the origin chain. - &#x60;INTENTS&#x60; - the account ID within NEAR Intents to which you should transfer assets. | 
 **DestinationAsset** | **string** | ID of the destination asset. | 
-**Amount** | **string** | Amount to swap as the base amount (can be switched to exact input/output using the dedicated flag), denoted in the smallest unit of the specified currency (e.g., wei for ETH). | 
-**RefundTo** | **string** | Address for user refund. | 
-**RefundType** | **string** | Type of refund address: - &#x60;ORIGIN_CHAIN&#x60; - assets will be refunded to &#x60;refundTo&#x60; address on the origin chain - &#x60;INTENTS&#x60; - assets will be refunded to &#x60;refundTo&#x60; intents account | 
-**Recipient** | **string** | Recipient address. The format should match &#x60;recipientType&#x60;. | 
+**Amount** | **string** | Amount to swap as the base amount. It is interpreted as the input or output amount based on the &#x60;swapType&#x60; flag and is specified in the smallest unit of the currency (e.g., wei for ETH). | 
+**RefundTo** | **string** | Address used for refunds. | 
+**RefundType** | **string** | Type of refund address: - &#x60;ORIGIN_CHAIN&#x60; - assets are refunded to the &#x60;refundTo&#x60; address on the origin chain. - &#x60;INTENTS&#x60; - assets are refunded to the &#x60;refundTo&#x60; Intents account. | 
+**Recipient** | **string** | Recipient address. The format must match &#x60;recipientType&#x60;. | 
 **VirtualChainRecipient** | Pointer to **string** | EVM address of a transfer recipient in a virtual chain | [optional] 
 **VirtualChainRefundRecipient** | Pointer to **string** | EVM address of a refund recipient in a virtual chain | [optional] 
-**RecipientType** | **string** | Type of recipient address: - &#x60;DESTINATION_CHAIN&#x60; - assets will be transferred to chain of &#x60;destinationAsset&#x60; - &#x60;INTENTS&#x60; - assets will be transferred to account inside intents | 
-**Deadline** | **time.Time** | Timestamp in ISO format, that identifies when user refund will begin if the swap isn&#39;t completed by then. It needs to exceed the time required for the deposit tx to be minted, e.g. for Bitcoin it might require ~1h depending on the gas fees paid. | 
-**Referral** | Pointer to **string** | Referral identifier(lower case only). It will be reflected in the on-chain data and displayed on public analytics platforms. | [optional] 
-**QuoteWaitingTimeMs** | Pointer to **float32** | Time in milliseconds user is willing to wait for quote from relay. | [optional] [default to 3000]
+**RecipientType** | **string** | Type of recipient address: - &#x60;DESTINATION_CHAIN&#x60; - assets are transferred to the chain of &#x60;destinationAsset&#x60;. - &#x60;INTENTS&#x60; - assets are transferred to an account inside Intents | 
+**Deadline** | **time.Time** | Timestamp in ISO format that identifies when the user refund begins if the swap isn&#39;t completed by then. It must exceed the time required for the deposit transaction to be mined. For example, Bitcoin may require around one hour depending on the fees paid. | 
+**Referral** | Pointer to **string** | Referral identifier (lowercase only). It will be reflected in the on-chain data and displayed on public analytics platforms. | [optional] 
+**QuoteWaitingTimeMs** | Pointer to **float32** | Time in milliseconds the user is willing to wait for a quote from the relay. | [optional] [default to 3000]
 **AppFees** | Pointer to [**[]AppFee**](AppFee.md) | List of recipients and their fees | [optional] 
 
 ## Methods
@@ -60,6 +61,31 @@ and a boolean to check if the value has been set.
 
 SetDry sets Dry field to given value.
 
+
+### GetDepositMode
+
+`func (o *QuoteRequest) GetDepositMode() string`
+
+GetDepositMode returns the DepositMode field if non-nil, zero value otherwise.
+
+### GetDepositModeOk
+
+`func (o *QuoteRequest) GetDepositModeOk() (*string, bool)`
+
+GetDepositModeOk returns a tuple with the DepositMode field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDepositMode
+
+`func (o *QuoteRequest) SetDepositMode(v string)`
+
+SetDepositMode sets DepositMode field to given value.
+
+### HasDepositMode
+
+`func (o *QuoteRequest) HasDepositMode() bool`
+
+HasDepositMode returns a boolean if a field has been set.
 
 ### GetSwapType
 

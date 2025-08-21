@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Recipient** | **string** | Intents Account ID where this fee will be transferred to | 
+**Recipient** | **string** | Account ID within Intents to which this fee will be transferred | 
 **Fee** | **float32** | Fee for this recipient as part of amountIn in basis points (1/100th of a percent), e.g. 100 for 1% fee | 
 
 ## Methods

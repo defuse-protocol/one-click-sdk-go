@@ -3,7 +3,7 @@ info:
   contact: {}
   description: API for One-Click Swaps
   title: 1Click Swap API
-  version: 0.1.8
+  version: 0.1.10
 servers:
 - url: https://1click.chaindefuser.com
 paths:
@@ -209,7 +209,7 @@ components:
         recipient: recipient.near
       properties:
         recipient:
-          description: Intents Account ID where this fee will be transferred to
+          description: Account ID within Intents to which this fee will be transferred
           example: recipient.near
           type: string
         fee:
@@ -224,6 +224,7 @@ components:
     QuoteRequest:
       example:
         quoteWaitingTimeMs: 3000
+        depositMode: SIMPLE
         amount: "1000"
         swapType: EXACT_INPUT
         appFees:
@@ -254,12 +255,23 @@ components:
             - `deadline`
           example: true
           type: boolean
+        depositMode:
+          default: SIMPLE
+          description: |-
+            What deposit address mode you will get in the response, most chain supports only `SIMPLE` and some(for example `stellar`) only `MEMO`:
+            - `SIMPLE` - usual deposit with only deposit address.
+            - `MEMO` - some chains will **REQUIRE** the `memo` together with `depositAddress` for swap to work.
+          enum:
+          - SIMPLE
+          - MEMO
+          example: SIMPLE
+          type: string
         swapType:
           description: |-
-            Whether to use the amount as the output or the input for the basis of the swap:
-            - `EXACT_INPUT` - request output amount for exact input.
-            - `EXACT_OUTPUT` - request output amount for exact output. The `refundTo` address will always receive excess tokens back even after the swap is complete.
-            - `FLEX_INPUT` - flexible input amount that allows for partial deposits and variable amounts.
+            How to interpret `amount` when performing the swap:
+              - `EXACT_INPUT` - requests the output amount for an exact input.
+              - `EXACT_OUTPUT` - requests the input amount for an exact output. The `refundTo` address always receives any excess tokens after the swap is complete.
+              - `FLEX_INPUT` - a flexible input amount that allows for partial deposits and variable amounts.
           enum:
           - EXACT_INPUT
           - EXACT_OUTPUT
@@ -276,9 +288,9 @@ components:
           type: string
         depositType:
           description: |-
-            Type of the deposit address:
-            - `ORIGIN_CHAIN` - deposit address on the origin chain
-            - `INTENTS` - **account ID** inside near intents to which you should transfer assets inside intents.
+            Type of deposit address:
+            - `ORIGIN_CHAIN` - deposit address on the origin chain.
+            - `INTENTS` - the account ID within NEAR Intents to which you should transfer assets.
           enum:
           - ORIGIN_CHAIN
           - INTENTS
@@ -288,26 +300,26 @@ components:
           example: nep141:sol-5ce3bf3a31af18be40ba30f721101b4341690186.omft.near
           type: string
         amount:
-          description: "Amount to swap as the base amount (can be switched to exact\
-            \ input/output using the dedicated flag), denoted in the smallest unit\
-            \ of the specified currency (e.g., wei for ETH)."
+          description: "Amount to swap as the base amount. It is interpreted as the\
+            \ input or output amount based on the `swapType` flag and is specified\
+            \ in the smallest unit of the currency (e.g., wei for ETH)."
           example: "1000"
           type: string
         refundTo:
-          description: Address for user refund.
+          description: Address used for refunds.
           example: 0x2527D02599Ba641c19FEa793cD0F167589a0f10D
           type: string
         refundType:
           description: |-
             Type of refund address:
-            - `ORIGIN_CHAIN` - assets will be refunded to `refundTo` address on the origin chain
-            - `INTENTS` - assets will be refunded to `refundTo` intents account
+            - `ORIGIN_CHAIN` - assets are refunded to the `refundTo` address on the origin chain.
+            - `INTENTS` - assets are refunded to the `refundTo` Intents account.
           enum:
           - ORIGIN_CHAIN
           - INTENTS
           type: string
         recipient:
-          description: Recipient address. The format should match `recipientType`.
+          description: Recipient address. The format must match `recipientType`.
           example: 13QkxhNMrTPxoCkRdYdJ65tFuwXPhL5gLS2Z5Nr6gjRK
           type: string
         virtualChainRecipient:
@@ -321,29 +333,29 @@ components:
         recipientType:
           description: |-
             Type of recipient address:
-            - `DESTINATION_CHAIN` - assets will be transferred to chain of `destinationAsset`
-            - `INTENTS` - assets will be transferred to account inside intents
+            - `DESTINATION_CHAIN` - assets are transferred to the chain of `destinationAsset`.
+            - `INTENTS` - assets are transferred to an account inside Intents
           enum:
           - DESTINATION_CHAIN
           - INTENTS
           type: string
         deadline:
-          description: "Timestamp in ISO format, that identifies when user refund\
-            \ will begin if the swap isn't completed by then. It needs to exceed the\
-            \ time required for the deposit tx to be minted, e.g. for Bitcoin it might\
-            \ require ~1h depending on the gas fees paid."
+          description: "Timestamp in ISO format that identifies when the user refund\
+            \ begins if the swap isn't completed by then. It must exceed the time\
+            \ required for the deposit transaction to be mined. For example, Bitcoin\
+            \ may require around one hour depending on the fees paid."
           example: 2019-08-24T14:15:22Z
           format: date-time
           type: string
         referral:
-          description: Referral identifier(lower case only). It will be reflected
+          description: Referral identifier (lowercase only). It will be reflected
             in the on-chain data and displayed on public analytics platforms.
           example: referral
           type: string
         quoteWaitingTimeMs:
           default: 3000
-          description: Time in milliseconds user is willing to wait for quote from
-            relay.
+          description: Time in milliseconds the user is willing to wait for a quote
+            from the relay.
           example: 3000
           type: number
         appFees:
@@ -369,10 +381,15 @@ components:
       properties:
         depositAddress:
           description: |-
-            The deposit address on the chain of `originAsset` in case if `depositType` is `ORIGIN_CHAIN`.
+            The deposit address on the chain of `originAsset` when `depositType` is `ORIGIN_CHAIN`.
 
-            The deposit address inside of near intents (the verifier smart contract) in case if `depositType` is `INTENTS`.
+            The deposit address inside NEAR Intents (the verifier smart contract) when `depositType` is `INTENTS`.
           example: 0x76b4c56085ED136a8744D52bE956396624a730E8
+          type: string
+        depositMemo:
+          description: Some of the deposit addresses **REQUIRE** to also include the
+            `memo` for the deposit to be processed
+          example: "1111111"
           type: string
         amountIn:
           description: Amount of the origin asset
@@ -387,7 +404,8 @@ components:
           example: "1"
           type: string
         minAmountIn:
-          description: Minimum amount of the origin asset that will be used for swap
+          description: Minimum amount of the origin asset that will be used for the
+            swap
           example: "995000"
           type: string
         amountOut:
@@ -403,24 +421,24 @@ components:
           example: "9.95"
           type: string
         minAmountOut:
-          description: Minimum amount with slippage taken into account
+          description: Minimum output amount after slippage is applied
           example: "9900000"
           type: string
         deadline:
-          description: Time when the deposit address will become inactive and funds
-            might be lost
+          description: Time when the deposit address becomes inactive and funds may
+            be lost
           example: 2025-03-04T15:00:00Z
           format: date-time
           type: string
         timeWhenInactive:
-          description: Time when the deposit address will become cold and swap processing
-            will take more time
+          description: "Time when the deposit address becomes cold, causing swap processing\
+            \ to take longer"
           example: 2025-03-04T15:00:00Z
           format: date-time
           type: string
         timeEstimate:
-          description: Estimated time in seconds for swap to be executed after the
-            deposit transaction is confirmed
+          description: Estimated time in seconds for the swap to be executed after
+            the deposit transaction is confirmed
           example: 120
           type: number
         virtualChainRecipient:
@@ -450,8 +468,8 @@ components:
         timestamp: 2019-08-24T14:15:22Z
       properties:
         timestamp:
-          description: Timestamp in ISO format that took part in the deposit address
-            derivation
+          description: Timestamp in ISO format that was used to derive the deposit
+            address
           example: 2019-08-24T14:15:22Z
           format: date-time
           type: string
@@ -467,8 +485,8 @@ components:
         quote:
           allOf:
           - $ref: '#/components/schemas/Quote'
-          description: Response that contains the deposit address to send "amount"
-            of `originAsset` and possible output amount.
+          description: Response containing the deposit address for sending the `amount`
+            of `originAsset` and the expected output amount.
       required:
       - quote
       - quoteRequest
@@ -506,17 +524,17 @@ components:
             type: string
           type: array
         nearTxHashes:
-          description: All Near transactions executed for this swap
+          description: All NEAR transactions executed for this swap
           items:
             type: string
           type: array
         amountIn:
-          description: Exact amount of `originToken` after trade was settled
+          description: Exact amount of `originToken` after the trade was settled
           example: "1000"
           type: string
         amountInFormatted:
-          description: Exact amount of `originToken` after trade was settled in readable
-            format
+          description: Exact amount of `originToken` in readable format after the
+            trade was settled
           example: "0.1"
           type: string
         amountInUsd:
@@ -524,11 +542,12 @@ components:
           example: "0.1"
           type: string
         amountOut:
-          description: Exact amount of `destinationToken` after trade was settled
+          description: Exact amount of `destinationToken` after the trade was settled
           example: "9950000"
           type: string
         amountOutFormatted:
-          description: Exact amount of `destinationToken` in readable format
+          description: Exact amount of `destinationToken` in readable format after
+            the trade was settled
           example: "9.95"
           type: string
         amountOutUsd:
@@ -552,7 +571,7 @@ components:
             $ref: '#/components/schemas/TransactionDetails'
           type: array
         refundedAmount:
-          description: Amount of `originAsset` that got transferred to `refundTo`
+          description: Amount of `originAsset` transferred to `refundTo`
           example: "1000"
           type: string
         refundedAmountFormatted:
@@ -579,7 +598,7 @@ components:
         quoteResponse:
           allOf:
           - $ref: '#/components/schemas/QuoteResponse'
-          description: Quote response from original request
+          description: Quote response from the original request
         status:
           enum:
           - KNOWN_DEPOSIT_TX
@@ -631,7 +650,7 @@ components:
         quoteResponse:
           allOf:
           - $ref: '#/components/schemas/QuoteResponse'
-          description: Quote response from original request
+          description: Quote response from the original request
         status:
           enum:
           - KNOWN_DEPOSIT_TX
